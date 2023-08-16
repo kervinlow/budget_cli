@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "budget_cli"
+  site-url: "https://kervinlow.github.io/budget_cli"
+  description: "A command-line budget calculator"
+  repo-branch: main
+  repo-url: "https://github.com/kervinlow/budget_cli"
