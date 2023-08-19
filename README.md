@@ -5,7 +5,7 @@
 A console script written in the Python programming language that helps
 you to calculate the total budget for a given period between two dates.
 
-This documentation was created with
+The console script and its documentation were created with
 [nbdev](https://github.com/fastai/nbdev).
 
 ## Install
@@ -13,6 +13,9 @@ This documentation was created with
 ``` sh
 pip install budget
 ```
+
+(Note: The application has not been released to PyPI yet. Use
+`pip install -e .` at the root folder of the local cloned repository.)
 
 ## How to use
 
