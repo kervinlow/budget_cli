@@ -1,0 +1,52 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "budget_cli",
+    "section": "",
+    "text": "A console script written in the Python programming language that helps you to calculate the total budget for a given period between two dates.\nThe console script and its documentation were created with nbdev.",
+    "crumbs": [
+      "budget_cli"
+    ]
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "budget_cli",
+    "section": "Install",
+    "text": "Install\npip install budget\n(Note: The application has not been released to PyPI yet. Use pip install -e . at the root folder of the local cloned repository.)",
+    "crumbs": [
+      "budget_cli"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "budget_cli",
+    "section": "How to use",
+    "text": "How to use\nThe simplest usage example:\n\n! budget 1 20230813 20230902\n\n18.0\n\n\nThis means that if the daily budget is 1 dollar, and if we are budgeting for only six days in each week (i.e. only from Monday to Saturday), the total budget for the period from 13 August 2023 to 2 September 2023 would come to 18 dollars.\nWe can change the budgeting to be for all seven days of each week by specifying the --days_in_week option with a value of 7:\n\n! budget 1 20230813 20230902 --days_in_week 7\n\n21.0\n\n\nIn this case, the total budget for the period becomes 21 dollars.\nThe default value of the days_in_week argument is 6.\nWe can also specify the daily weights to apply. For example:\n\n! budget 1 20230813 20230902 --weights '[1,2,1,1,1,1,0]'\n\n21.0\n\n\nHere, the specified --weights means that we want to apply a multiplier of 1 on every Monday, Wednesday, Thursday, Friday, and Saturday; a multiplier of 2 on every Tuesday; and, a multiplier of 0 on every Sunday. The total budget would be 21 dollars.\nNote: When the --weights option is used, it will supersede the --days_in_week option. Also, the --weights option must be a string representation of a list with exactly seven elements, and where each of them has to be either an integer, or a real number.\nFinally, we can also specify a different daily budget to use for each day of the week with the --amounts option:\n\n! budget 1 20230813 20230902 --amounts '[1,2,1,1,1,1,0]' --days_in_week 7\n\n21.0\n\n\nNote: When the --amounts option is used, it will supersede the budget amount (the ‘1’ in the above example) that we have specified. The --amounts option must be a string representation of a list with exactly seven elements, and where each of them has to be either an integer, or a real number.\nIf you need help on the usage, you can type the following command (excluding the exclamation mark) in your terminal:\n\n! budget -h\n\nusage: budget [-h] [--days_in_week DAYS_IN_WEEK] [--weights WEIGHTS]\n              [--amounts AMOUNTS]\n              budget start_date end_date\n\nReturn the total budget for the calculation period from the start date to the\nend date (inclusive).\n\npositional arguments:\n  budget                       The budget amount per day\n  start_date                   The start date of the calculation period; it is\n                               expected to be in the ISO 8601 format\n  end_date                     The end date of the calculation period; it is\n                               expected to be in the ISO 8601 format\n\noptions:\n  -h, --help                   show this help message and exit\n  --days_in_week DAYS_IN_WEEK  The number of consecutive days in a week\n                               (starting from Monday) to include in the budget\n                               (default: 6)\n  --weights WEIGHTS            The weight to apply for each day of a week, and\n                               specified as '[x0, .. , xn]', where x0..xn are\n                               numbers; this will override --days_in_week\n  --amounts AMOUNTS            The budget amount for each day of a week, and\n                               specified as '[x0, .. , xn]', where x0..xn are\n                               numbers; the budget amount per day that was\n                               specified will be ignored",
+    "crumbs": [
+      "budget_cli"
+    ]
+  },
+  {
+    "objectID": "budget.html",
+    "href": "budget.html",
+    "title": "budget",
+    "section": "",
+    "text": "Importing all of the required libraries:\nThe entry point of the budget console script:\nsource",
+    "crumbs": [
+      "budget"
+    ]
+  },
+  {
+    "objectID": "budget.html#unit-tests",
+    "href": "budget.html#unit-tests",
+    "title": "budget",
+    "section": "Unit Tests",
+    "text": "Unit Tests\nThe calendar for the month of August in 2023:\n\n\n\nScreenshot 2023-08-14 at 12.26.09 AM.png\n\n\nTesting the scenario where the start_date and end_date are of the expected ISO 8601 date format:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902'),\n        18.0)\n\nTesting the scenario where the start_date and end_date are of the expected ISO 8601 date format, and the days_in_week argument is a different value from the default value of 6:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', days_in_week=7),\n        21.0)\n\nTesting a different variation of the date format in the ISO 8601 standard, which previously was the only format accepted by the datetime library (before version 3.11):\n\ntest_eq(main(budget=1, start_date='2023-08-13', end_date='2023-09-02'),\n        18.0)\n\nTesting a set of weights that is equivalent to days_in_weeks = 6:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', weights='[1,1,1,1,1,1,0]'),\n        18.0)\n\nTesting a set of weights that is equivalent to days_in_weeks = 7:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', weights='[1,1,1,1,1,1,1]'),\n        21.0)\n\nTesting a set of amounts in conjunction with the default value of days_in_week = 6:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', amounts='[1,1,1,1,1,1,0]'),\n        18.0)\n\nBecause days_in_week = 6, ws will take on the value of [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0], and total_budget will not take into consideration the 7th element of amts (which is also amounts):\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', amounts='[1,1,1,1,1,1,1]'),\n        18.0)\n\nThe following test case will take into consideration the 7th element of amts (and amounts), as days_in_week = 7:\n\ntest_eq(main(budget=1, start_date='20230813', end_date='20230902', amounts='[1,1,1,1,1,1,1]',\n             days_in_week=7), 21.0)\n\nsys.exit() is invoked when the start_date is not of the ISO 8601 date format, and it raises a SystemExit exception:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='2023', end_date='20230902')\n\nSimilarly, sys.exit() is invoked when the end_date is not of the ISO 8601 date format, and it raises a SystemExit exception:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='2023')\n\nThe SystemExit exception is raised by sys.exit() when the end_date is before the start_date:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230808')\n\nThe SystemExit exception is raised by sys.exit() when the weights argument is not well-formed:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', weights='[1,a,1,1,1,1,0]')\n\nThe same exception is raised when the amounts argument is not well-formed:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', amounts='[1,a,1,1,1,1,0]')\n\nAlso, the SystemExit exception is raised when the weights argument has less than 7 elements:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', weights='[1,1,1]')\n\nThe same outcome when the amounts argument has less than 7 elements:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', amounts='[1,1,1]')\n\nThe same exception is raised when the days_in_week argument is not of the integer value from 1 to 7:\n\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', days_in_week = 8)\nwith ExceptionExpected(ex=SystemExit): main(budget=1, start_date='20230813', end_date='20230902', days_in_week = 0)",
+    "crumbs": [
+      "budget"
+    ]
+  }
+]
